@@ -53,7 +53,7 @@ resource aws_iam_role_policy_attachment other_policies_attachment {
         "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
     ])
     role = aws_iam_role.mc_server_role.name
-    policy_arn = each.value.arn
+    policy_arn = each.value
 }
 
 ###########################################################
