@@ -48,7 +48,7 @@ resource aws_iam_role_policy_attachment iam_cloudwatch_roles_ec2_mc_server_polic
     policy_arn = aws_iam_policy.iam_cloudwatch_roles_ec2_mc_server_policy.arn
 }
 
-resource aws_iam_role_policy_attachment s3_mc_server_policy_attachment {
+resource aws_iam_role_policy_attachment other_policies_attachment {
     for_each = toset([
         "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
     ])
