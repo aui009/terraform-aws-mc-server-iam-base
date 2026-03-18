@@ -34,12 +34,12 @@ resource aws_iam_policy iam_cloudwatch_roles_ec2_mc_server_policy {
 ###########################################################
 
 resource aws_iam_role_policy_attachment s3_mc_server_policy_attachment {
-    for_each = [
-        aws_iam_policy.s3_mc_server_policy,
-        aws_iam_policy.ssm_ec2_mc_server_policy,
-        aws_iam_policy.iam_cloudwatch_roles_ec2_mc_server_policy,
+    for_each = toset([
+        aws_iam_policy.s3_mc_server_policy.arn,
+        aws_iam_policy.ssm_ec2_mc_server_policy.arn,
+        aws_iam_policy.iam_cloudwatch_roles_ec2_mc_server_policy.arn,
         "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
-    ]
+    ])
     role = aws_iam_role.mc_server_role.name
     policy_arn = each.value.arn
 }
