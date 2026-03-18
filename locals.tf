@@ -45,7 +45,10 @@ locals {
         {
           "Sid" : "VisualEditor0",
           "Effect" : "Allow",
-          "Action" : "ec2:StopInstances",
+          "Action" : [
+            "ec2:StopInstances",
+            "ec2:DescribeInstances"
+          ],
           "Resource" : "arn:aws:ec2:*:${local.account_id}:instance/*"
         }
       ]
