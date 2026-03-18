@@ -35,6 +35,12 @@ resource "aws_iam_policy" "lambda_policy_stop_instances" {
   policy      = local.iam_policies_json["lambda_policy_stop_instances"]
 }
 
+resource "aws_iam_policy" "lambda_policy_start_instances" {
+  name        = "lambda-policy-start-instances-policy"
+  description = "Policy for Lambda function to start EC2 instances only"
+  policy      = local.iam_policies_json["lambda_policy_start_instances"]
+}
+
 ###########################################################
 #                 IAM Policies Roles Attachement          #
 ###########################################################

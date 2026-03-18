@@ -49,7 +49,7 @@ locals {
             "ec2:StopInstances",
             "ec2:DescribeInstances"
           ],
-          "Resource" : "arn:aws:ec2:*:${local.account_id}:instance/*"
+          "Resource" : "*"
         }
       ]
     }),
@@ -82,6 +82,21 @@ locals {
             "arn:aws:ssm:*:${local.account_id}:parameter/*",
             "arn:aws:ssm:*:${local.account_id}:*"
           ]
+        }
+      ]
+    }),
+
+    lambda_policy_start_instances = jsonencode({
+      "Version" : "2012-10-17",
+      "Statement" : [
+        {
+          "Sid" : "VisualEditor0",
+          "Effect" : "Allow",
+          "Action" : [
+            "ec2:StartInstances",
+            "ec2:DescribeInstances"
+          ],
+          "Resource" : "*"
         }
       ]
     })
