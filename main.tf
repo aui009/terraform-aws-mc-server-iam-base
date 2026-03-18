@@ -30,7 +30,7 @@ resource aws_iam_policy iam_cloudwatch_roles_ec2_mc_server_policy {
 }
 
 resource aws_iam_policy lambda_policy_stop_instances {
-  name = "lambda-policy-stop-instances"
+  name = "lambda-policy-stop-instances-policy"
   description = "Policy for Lambda function to stop EC2 instances only"
   policy = file("${path.module}/policies/lambda_policy_stop_instances.json")
 }
