@@ -49,6 +49,6 @@ resource aws_iam_role_policy_attachment s3_mc_server_policy_attachment {
 ###########################################################
 
 import {
-    to = aws_iam_role.mc_server_role.name
+    to = aws_iam_role.mc_server_role
     id = "mc-server-status-role"
 }
