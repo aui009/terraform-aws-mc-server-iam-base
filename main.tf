@@ -29,6 +29,11 @@ resource aws_iam_policy iam_cloudwatch_roles_ec2_mc_server_policy {
   policy = file("${path.module}/policies/iam_cloudwatch_roles_ec2_mc_server_policy.json")
 }
 
+resource aws_iam_policy lambda_policy_stop_instances {
+  name = "lambda-policy-stop-instances"
+  description = "Policy for Lambda function to stop EC2 instances only"
+  policy = file("${path.module}/policies/lambda_policy_stop_instances.json")
+}
 ###########################################################
 #                 IAM Policies Roles Attachement          #
 ###########################################################
@@ -60,7 +65,7 @@ resource aws_iam_role_policy_attachment other_policies_attachment {
 #                 IAM Roles Imports                       #
 ###########################################################
 
-import {
+/*import {
     to = aws_iam_role.mc_server_role
     id = "mc-server-status-role"
-}
+}*/
