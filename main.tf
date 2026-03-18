@@ -14,19 +14,19 @@ resource aws_iam_role mc_server_role {
 resource aws_iam_policy s3_mc_server_policy {
   name = "s3-mc-server-policy"
   description = "Policy for MC Server to access S3 bucket"
-  policy = jsondecode(file("${path.module}/policies/s3_mc_server_policy.json"))
+  policy = file("${path.module}/policies/s3_mc_server_policy.json")
 }
 
 resource aws_iam_policy ssm_ec2_mc_server_policy {
   name = "ssm-ec2-mc-server-policy"
   description = "Policy for MC Server to access SSM Parameter Store"
-  policy = jsondecode(file("${path.module}/policies/ssm_ec2_mc_server_policy.json"))
+  policy = file("${path.module}/policies/ssm_ec2_mc_server_policy.json")
 }
 
 resource aws_iam_policy iam_cloudwatch_roles_ec2_mc_server_policy {
   name = "iam-cloudwatch-roles-ec2-mc-server-policy"
   description = "Policy for MC Server to access CloudWatch Logs and IAM Roles"
-  policy = jsondecode(file("${path.module}/policies/iam_cloudwatch_roles_ec2_mc_server_policy.json"))
+  policy = file("${path.module}/policies/iam_cloudwatch_roles_ec2_mc_server_policy.json")
 }
 
 ###########################################################
