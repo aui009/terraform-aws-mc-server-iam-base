@@ -4,7 +4,7 @@
 
 resource aws_iam_role mc_server_role {
   name = "mc-server-status-role"
-  assume_role_policy = jsondecode(filepath("${path.module}/policies/ec2_assume_role_policy.json"))
+  assume_role_policy = file("${path.module}/policies/ec2_assume_role_policy.json")
 }
 
 ###########################################################
