@@ -21,3 +21,8 @@ output "iam_cloudwatch_roles_ec2_mc_server_policy_arn" {
   description = "ARN of the IAM/CloudWatch policy for MC Server"
   value       = aws_iam_policy.iam_cloudwatch_roles_ec2_mc_server_policy.arn
 }
+
+output "lambda_policy_start_instances_arn" {
+  description = "ARN of the Lambda policy that allows starting EC2 instances"
+  value       = aws_iam_policy.lambda_policy_start_instances.arn
+}
