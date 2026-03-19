@@ -1,5 +1,14 @@
 data "aws_caller_identity" "current" {}
 
+data "terraform_remote_state" "based_layers" {
+  backend = "s3"
+  config = {
+    bucket = "terraform-state-file-ap-southeast-1-dev"
+    key    = "env:/dev/minecraft/base_layers/terraform.tfstate"
+    region = "ap-southeast-1"
+  }
+}
+
 locals {
   account_id = data.aws_caller_identity.current.account_id
 
@@ -123,14 +132,27 @@ locals {
           "Effect" : "Allow",
           "Action" : [
             "ssm:SendCommand"
-           ,"ssm:ListCommands"
-           ,"ssm:ListCommandInvocations"
-           ,"ssm:GetCommandInvocation"
+            , "ssm:ListCommands"
+            , "ssm:ListCommandInvocations"
+            , "ssm:GetCommandInvocation"
           ],
           "Resource" : [
-            "arn:aws:ec2:*:523761210076:instance/*",
-            "arn:aws:ssm:ap-southeast-1::document/*"
+            "arn:aws:ec2:*:${local.account_id}:instance/*",
+            "arn:aws:ssm:ap-southeast-1::document/*",
+            "arn:aws:ssm:ap-southeast-1:${local.account_id}:*"
           ]
+        }
+      ]
+    }),
+
+    miku_sqs_policy_only = jsonencode({
+      "Version" : "2012-10-17",
+      "Statement" : [
+        {
+          "Sid" : "VisualEditor0",
+          "Effect" : "Allow",
+          "Action" : "sqs:SendMessage",
+          "Resource" : data.terraform_remote_state.based_layers.outputs.miku_queue_sqs_arn
         }
       ]
     })
@@ -141,4 +163,5 @@ locals {
   ###########################################################
   # Local Variables Base IAM
   ###########################################################
+  env_var = terraform.workspace
 }

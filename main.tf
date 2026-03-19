@@ -52,6 +52,13 @@ resource "aws_iam_policy" "lambda_policy_ssm_policy" {
   description = "Policy for Lambda function to access SSM Parameter Store"
   policy      = local.iam_policies_json["lambda_policy_ssm_policy"]
 }
+
+resource "aws_iam_policy" "miku_sqs_policy" {
+  name        = "miku-sqs-${local.env_var}-policy"
+  description = "policy for sqs entity miku"
+  policy      = local.iam_policies_json["miku_sqs_policy_only"]
+}
+
 ###########################################################
 #                 IAM Policies Roles Attachement          #
 ###########################################################
@@ -74,7 +81,7 @@ resource "aws_iam_role_policy_attachment" "iam_cloudwatch_roles_ec2_mc_server_po
 resource "aws_iam_role_policy_attachment" "other_policies_attachment" {
   for_each = toset([
     "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
-    ,"arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+    , "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
   ])
   role       = aws_iam_role.mc_server_role.name
   policy_arn = each.value
@@ -88,3 +95,7 @@ resource "aws_iam_role_policy_attachment" "other_policies_attachment" {
     to = aws_iam_role.mc_server_role
     id = "mc-server-status-role"
 }*/
+import {
+  to = aws_iam_policy.miku_sqs_policy
+  id = "arn:aws:iam::523761210076:policy/miku-sqs-dev-policy"
+}

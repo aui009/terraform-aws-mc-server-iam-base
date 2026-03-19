@@ -36,3 +36,8 @@ output "lambda_policy_ssm_policy_arn" {
   description = "ARN of the Lambda policy that allows access to SSM Parameter Store"
   value       = aws_iam_policy.lambda_policy_ssm_policy.arn
 }
+
+output "miku_sqs_policy_arn" {
+  description = "ARN of the SQS policy for sending messages to Miku"
+  value       = aws_iam_policy.miku_sqs_policy.arn
+}
