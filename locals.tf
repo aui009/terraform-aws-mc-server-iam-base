@@ -127,7 +127,10 @@ locals {
            ,"ssm:ListCommandInvocations"
            ,"ssm:GetCommandInvocation"
           ],
-          "Resource" : "arn:aws:ec2:*:523761210076:instance/*"
+          "Resource" : [
+            "arn:aws:ec2:*:523761210076:instance/*",
+            "arn:aws:ssm:ap-southeast-1::document/*"
+          ]
         }
       ]
     })
