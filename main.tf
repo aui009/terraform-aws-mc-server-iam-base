@@ -78,10 +78,15 @@ resource "aws_iam_role_policy_attachment" "iam_cloudwatch_roles_ec2_mc_server_po
   policy_arn = aws_iam_policy.iam_cloudwatch_roles_ec2_mc_server_policy.arn
 }
 
+resource "aws_iam_role_policy_attachment" "miku_sqs_policy_attachment" {
+  role       = aws_iam_role.mc_server_role.name
+  policy_arn = aws_iam_policy.miku_sqs_policy.arn
+}
+
 resource "aws_iam_role_policy_attachment" "other_policies_attachment" {
   for_each = toset([
     "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
-    , "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+   ,"arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
   ])
   role       = aws_iam_role.mc_server_role.name
   policy_arn = each.value
