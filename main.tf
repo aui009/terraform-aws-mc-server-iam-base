@@ -41,6 +41,17 @@ resource "aws_iam_policy" "lambda_policy_start_instances" {
   policy      = local.iam_policies_json["lambda_policy_start_instances"]
 }
 
+resource "aws_iam_policy" "lambda_policy_desc_instances_only" {
+  name        = "lambda-policy-desc-instances-policy"
+  description = "Policy for Lambda function to describe EC2 instances only"
+  policy      = local.iam_policies_json["lambda_policy_desc_instances_only"]
+}
+
+resource "aws_iam_policy" "lambda_policy_ssm_policy" {
+  name        = "lambda-policy-ssm-policy"
+  description = "Policy for Lambda function to access SSM Parameter Store"
+  policy      = local.iam_policies_json["lambda_policy_ssm_policy"]
+}
 ###########################################################
 #                 IAM Policies Roles Attachement          #
 ###########################################################
@@ -63,6 +74,7 @@ resource "aws_iam_role_policy_attachment" "iam_cloudwatch_roles_ec2_mc_server_po
 resource "aws_iam_role_policy_attachment" "other_policies_attachment" {
   for_each = toset([
     "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
+    ,"arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
   ])
   role       = aws_iam_role.mc_server_role.name
   policy_arn = each.value

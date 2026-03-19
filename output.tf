@@ -26,3 +26,13 @@ output "lambda_policy_start_instances_arn" {
   description = "ARN of the Lambda policy that allows starting EC2 instances"
   value       = aws_iam_policy.lambda_policy_start_instances.arn
 }
+
+output "lambda_policy_desc_instances_only_arn" {
+  description = "ARN of the Lambda policy that allows describing EC2 instances only"
+  value       = aws_iam_policy.lambda_policy_desc_instances_only.arn
+}
+
+output "lambda_policy_ssm_policy_arn" {
+  description = "ARN of the Lambda policy that allows access to SSM Parameter Store"
+  value       = aws_iam_policy.lambda_policy_ssm_policy.arn
+}

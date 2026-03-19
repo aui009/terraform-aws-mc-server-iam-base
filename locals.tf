@@ -99,6 +99,37 @@ locals {
           "Resource" : "*"
         }
       ]
+    }),
+
+    lambda_policy_desc_instances_only = jsonencode({
+      "Version" : "2012-10-17",
+      "Statement" : [
+        {
+          "Sid" : "VisualEditor0",
+          "Effect" : "Allow",
+          "Action" : [
+            "ec2:DescribeInstances"
+          ],
+          "Resource" : "*"
+        }
+      ]
+    }),
+
+    lambda_policy_ssm_policy = jsonencode({
+      "Version" : "2012-10-17",
+      "Statement" : [
+        {
+          "Sid" : "VisualEditor0",
+          "Effect" : "Allow",
+          "Action" : [
+            "ssm:SendCommand"
+           ,"ssm:ListCommands"
+           ,"ssm:ListCommandInvocations"
+           ,"ssm:GetCommandInvocation"
+          ],
+          "Resource" : "arn:aws:ec2:*:523761210076:instance/*"
+        }
+      ]
     })
     ###########################################################
     # End of IAM policies in JSON format for MC Server
