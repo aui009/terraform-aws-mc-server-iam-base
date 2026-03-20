@@ -3,8 +3,8 @@ data "aws_caller_identity" "current" {}
 data "terraform_remote_state" "based_layers" {
   backend = "s3"
   config = {
-    bucket = "terraform-state-file-ap-southeast-1-dev"
-    key    = "env:/dev/minecraft/base_layers/terraform.tfstate"
+    bucket = "terraform-state-file-ap-southeast-1-${terraform.workspace}"
+    key    = "env:/${terraform.workspace}/minecraft/base_layers/terraform.tfstate"
     region = "ap-southeast-1"
   }
 }

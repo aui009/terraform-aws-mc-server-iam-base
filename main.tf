@@ -100,7 +100,7 @@ resource "aws_iam_role_policy_attachment" "other_policies_attachment" {
     to = aws_iam_role.mc_server_role
     id = "mc-server-status-role"
 }*/
-import {
+/*import {
   to = aws_iam_policy.miku_sqs_policy
   id = "arn:aws:iam::523761210076:policy/miku-sqs-dev-policy"
-}
+}*/
