@@ -155,6 +155,18 @@ locals {
           "Resource" : data.terraform_remote_state.based_layers.outputs.miku_queue_sqs_arn
         }
       ]
+    }),
+
+    ec2_lambda_invoke_policy = jsonencode({
+      "Version" : "2012-10-17",
+      "Statement" : [
+        {
+          "Sid" : "VisualEditor0",
+          "Effect" : "Allow",
+          "Action" : "lambda:InvokeFunction",
+          "Resource" : "arn:aws:lambda:*:523761210076:function:*"
+        }
+      ]
     })
     ###########################################################
     # End of IAM policies in JSON format for MC Server
