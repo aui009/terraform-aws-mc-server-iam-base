@@ -59,6 +59,12 @@ resource "aws_iam_policy" "miku_sqs_policy" {
   policy      = local.iam_policies_json["miku_sqs_policy_only"]
 }
 
+resource "aws_iam_policy" "ec2_lambda_invoke_policy" {
+  name        = "ec2-lambda-invoke-policy"
+  description = "policy for ec2 to invoke lambda function"
+  policy      = local.iam_policies_json["ec2_lambda_invoke_policy"]
+}
+
 ###########################################################
 #                 IAM Policies Roles Attachement          #
 ###########################################################
@@ -81,6 +87,11 @@ resource "aws_iam_role_policy_attachment" "iam_cloudwatch_roles_ec2_mc_server_po
 resource "aws_iam_role_policy_attachment" "miku_sqs_policy_attachment" {
   role       = aws_iam_role.mc_server_role.name
   policy_arn = aws_iam_policy.miku_sqs_policy.arn
+}
+
+resource "aws_iam_role_policy_attachment" "ec2_lambda_invoke_policy_attachment" {
+  role       = aws_iam_role.mc_server_role.name
+  policy_arn = aws_iam_policy.ec2_lambda_invoke_policy.arn
 }
 
 resource "aws_iam_role_policy_attachment" "other_policies_attachment" {
