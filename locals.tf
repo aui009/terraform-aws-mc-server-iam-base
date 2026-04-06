@@ -203,7 +203,8 @@ locals {
           ],
           "Resource" : [
             "arn:aws:lambda:ap-southeast-1:${local.account_id}:function:mc_sendSQStoMiku_handler_server_sched_up:*",
-            "arn:aws:lambda:ap-southeast-1:${local.account_id}:function:mc_sendSQStoMiku_handler_server_down:*"
+            "arn:aws:lambda:ap-southeast-1:${local.account_id}:function:mc_sendSQStoMiku_handler_server_down:*",
+            "arn:aws:lambda:ap-southeast-1:${local.account_id}:function:mc_sendSQStoMiku_handler_server_down"
           ]
         },
         {
