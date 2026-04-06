@@ -1,4 +1,21 @@
 ##############################################################
+# Outputs for IAM Roles
+##############################################################
+output "mc_server_role_arn" {
+  description = "ARN of the IAM role for Minecraft server EC2 instance"
+  value       = aws_iam_role.mc_server_role.arn
+}
+
+output "step_fn_role_ssm_ec2_role_arn" {
+  description = "ARN of the IAM role for Step Function to manage SSM and EC2"
+  value       = aws_iam_role.step_fn_role_ssm_ec2_role.arn
+}
+
+output "eventbridge_step_fn_role_arn" {
+  description = "ARN of the IAM role for EventBridge to start Step Function execution"
+  value       = aws_iam_role.eventbridge_step_fn_role.arn
+}
+##############################################################
 # Outputs for IAM policies
 ##############################################################
 

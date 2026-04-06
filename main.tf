@@ -7,6 +7,26 @@ resource "aws_iam_role" "mc_server_role" {
   assume_role_policy = file("${path.module}/policies/ec2_assume_role_policy.json")
 }
 
+resource "aws_iam_role" "step_fn_role_ssm_ec2_role" {
+  name               = "step-fn-ssm-ec2-role"
+  assume_role_policy = local.iam_policies_json["step_fn_assume_role_policy"]
+}
+
+resource "aws_iam_role" "eventbridge_step_fn_role" {
+  name = "eventbridge-step-fn-role"
+  assume_role_policy = jsonencode({
+    Version : "2012-10-17",
+    Statement : [
+      {
+        Effect : "Allow",
+        Principal : {
+          Service : "events.amazonaws.com"
+        },
+        Action : "sts:AssumeRole"
+      }
+    ]
+  })
+}
 ###########################################################
 #                 IAM Policies                            #
 ###########################################################
@@ -65,9 +85,34 @@ resource "aws_iam_policy" "ec2_lambda_invoke_policy" {
   policy      = local.iam_policies_json["ec2_lambda_invoke_policy"]
 }
 
-###########################################################
-#                 IAM Policies Roles Attachement          #
-###########################################################
+resource "aws_iam_policy" "ssm_step_fn_policy" {
+  name        = "ssm-step-fn-policy"
+  description = "Policy for SSM to run Step Functions execution"
+  policy      = local.iam_policies_json["ssm_step_fn_policy"]
+}
+
+resource "aws_iam_policy" "lambda_invoke_step_fn_policy" {
+  name        = "lambda-invoke-step-fn-policy"
+  description = "Policy for step function to invoke lambda functions"
+  policy      = local.iam_policies_json["lambda_invoke_step_fn_policy"]
+}
+
+resource "aws_iam_role_policy" "eventbridge_policy" {
+  name = "eventbridge_sfn_policy"
+  role = aws_iam_role.eventbridge_step_fn_role.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Effect   = "Allow"
+      Action   = "states:StartExecution"
+      Resource = "arn:aws:states:*:${local.account_id}:stateMachine:*"
+    }]
+  })
+}
+###########################################################################
+#                 IAM Policies Roles Attachement - MC Server Role          
+###########################################################################
 
 resource "aws_iam_role_policy_attachment" "s3_mc_server_policy_attachment" {
   role       = aws_iam_role.mc_server_role.name
@@ -97,10 +142,23 @@ resource "aws_iam_role_policy_attachment" "ec2_lambda_invoke_policy_attachment" 
 resource "aws_iam_role_policy_attachment" "other_policies_attachment" {
   for_each = toset([
     "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
-   ,"arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+    , "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
   ])
   role       = aws_iam_role.mc_server_role.name
   policy_arn = each.value
+}
+
+###########################################################################
+#                 IAM Policies Roles Attachement - Step Function Role          
+###########################################################################
+resource "aws_iam_role_policy_attachment" "ssm_step_fn_policy_attachment" {
+  role       = aws_iam_role.step_fn_role_ssm_ec2_role.name
+  policy_arn = aws_iam_policy.ssm_step_fn_policy.arn
+}
+
+resource "aws_iam_role_policy_attachment" "lambda_invoke_step_fn_policy_attachment" {
+  role       = aws_iam_role.step_fn_role_ssm_ec2_role.name
+  policy_arn = aws_iam_policy.lambda_invoke_step_fn_policy.arn
 }
 
 ###########################################################
