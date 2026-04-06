@@ -164,10 +164,74 @@ locals {
           "Sid" : "VisualEditor0",
           "Effect" : "Allow",
           "Action" : "lambda:InvokeFunction",
-          "Resource" : "arn:aws:lambda:*:523761210076:function:*"
+          "Resource" : "arn:aws:lambda:*:${local.account_id}:function:*"
         }
       ]
-    })
+    }),
+
+    ssm_step_fn_policy = jsonencode({
+      "Version" : "2012-10-17",
+      "Statement" : [
+        {
+          "Sid" : "VisualEditor0",
+          "Effect" : "Allow",
+          "Action" : [
+            "ec2:DescribeInstances",
+            "ssm:GetCommandInvocation"
+          ],
+          "Resource" : "*"
+        },
+        {
+          "Sid" : "VisualEditor1",
+          "Effect" : "Allow",
+          "Action" : "ssm:SendCommand",
+          "Resource" : [
+            "arn:aws:ec2:*:${local.account_id}:instance/*",
+            "arn:aws:ssm:*:${local.account_id}:document/*"
+          ]
+        }
+      ]
+    }),
+
+    lambda_invoke_step_fn_policy = jsonencode({
+      "Version" : "2012-10-17",
+      "Statement" : [
+        {
+          "Effect" : "Allow",
+          "Action" : [
+            "lambda:InvokeFunction"
+          ],
+          "Resource" : [
+            "arn:aws:lambda:ap-southeast-1:${local.account_id}:function:mc_sendSQStoMiku_handler_server_sched_up:*",
+            "arn:aws:lambda:ap-southeast-1:${local.account_id}:function:mc_sendSQStoMiku_handler_server_down:*",
+            "arn:aws:lambda:ap-southeast-1:${local.account_id}:function:mc_sendSQStoMiku_handler_server_down"
+          ]
+        },
+        {
+          "Effect" : "Allow",
+          "Action" : [
+            "lambda:InvokeFunction"
+          ],
+          "Resource" : [
+            "arn:aws:lambda:ap-southeast-1:${local.account_id}:function:mc_sendSQStoMiku_handler_server_sched_up"
+          ]
+        }
+      ]
+    }),
+
+    step_fn_assume_role_policy = jsonencode({
+      "Version" : "2012-10-17",
+      "Statement" : [
+        {
+          "Effect" : "Allow",
+          "Principal" : {
+            "Service" : "states.amazonaws.com"
+          },
+          "Action" : "sts:AssumeRole"
+        }
+      ]
+      }
+    )
     ###########################################################
     # End of IAM policies in JSON format for MC Server
     ###########################################################
