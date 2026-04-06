@@ -11,6 +11,10 @@ output "step_fn_role_ssm_ec2_role_arn" {
   value       = aws_iam_role.step_fn_role_ssm_ec2_role.arn
 }
 
+output "eventbridge_step_fn_role_arn" {
+  description = "ARN of the IAM role for EventBridge to start Step Function execution"
+  value       = aws_iam_role.eventbridge_step_fn_role.arn
+}
 ##############################################################
 # Outputs for IAM policies
 ##############################################################

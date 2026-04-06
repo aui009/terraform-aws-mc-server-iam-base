@@ -11,6 +11,22 @@ resource "aws_iam_role" "step_fn_role_ssm_ec2_role" {
   name               = "step-fn-ssm-ec2-role"
   assume_role_policy = local.iam_policies_json["step_fn_assume_role_policy"]
 }
+
+resource "aws_iam_role" "eventbridge_step_fn_role" {
+  name = "eventbridge-step-fn-role"
+  assume_role_policy = jsonencode({
+    Version : "2012-10-17",
+    Statement : [
+      {
+        Effect : "Allow",
+        Principal : {
+          Service : "events.amazonaws.com"
+        },
+        Action : "sts:AssumeRole"
+      }
+    ]
+  })
+}
 ###########################################################
 #                 IAM Policies                            #
 ###########################################################
@@ -81,6 +97,19 @@ resource "aws_iam_policy" "lambda_invoke_step_fn_policy" {
   policy      = local.iam_policies_json["lambda_invoke_step_fn_policy"]
 }
 
+resource "aws_iam_role_policy" "eventbridge_policy" {
+  name = "eventbridge_sfn_policy"
+  role = aws_iam_role.eventbridge_step_fn_role.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Effect   = "Allow"
+      Action   = "states:StartExecution"
+      Resource = "arn:aws:states:*:${local.account_id}:stateMachine:*"
+    }]
+  })
+}
 ###########################################################################
 #                 IAM Policies Roles Attachement - MC Server Role          
 ###########################################################################
