@@ -231,6 +231,19 @@ locals {
         }
       ]
       }
+    ),
+
+    ssm_get_parameter_only_policy = jsonencode({
+      "Version" : "2012-10-17",
+      "Statement" : [
+        {
+          "Sid" : "VisualEditor0",
+          "Effect" : "Allow",
+          "Action" : "ssm:GetParameter",
+          "Resource" : "arn:aws:ssm:*:${local.account_id}:parameter/*"
+        }
+      ]
+      }
     )
     ###########################################################
     # End of IAM policies in JSON format for MC Server

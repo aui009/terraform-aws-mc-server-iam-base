@@ -110,6 +110,12 @@ resource "aws_iam_role_policy" "eventbridge_policy" {
     }]
   })
 }
+
+resource "aws_iam_policy" "ssm_get_parameter_only_policy" {
+  name        = "ssm-get-parameter-only-policy"
+  description = "Policy for Lambda function to get parameters from SSM Parameter Store only"
+  policy      = local.iam_policies_json["ssm_get_parameter_only_policy"]
+}
 ###########################################################################
 #                 IAM Policies Roles Attachement - MC Server Role          
 ###########################################################################
