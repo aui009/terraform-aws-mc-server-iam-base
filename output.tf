@@ -58,3 +58,8 @@ output "miku_sqs_policy_arn" {
   description = "ARN of the SQS policy for sending messages to Miku"
   value       = aws_iam_policy.miku_sqs_policy.arn
 }
+
+output "ssm_get_parameter_only_policy_arn" {
+  description = "ARN of the SSM policy that allows getting parameters from SSM Parameter Store only"
+  value       = aws_iam_policy.ssm_get_parameter_only_policy.arn
+}
