@@ -247,24 +247,33 @@ locals {
     ),
 
     lambda_ec2startinstance_disc_policy = jsonencode({
-      "Version" : "2012-10-17",
       "Statement" : [
         {
-          "Sid" : "VisualEditor0",
-          "Effect" : "Allow",
           "Action" : [
             "s3:GetObject",
-            "secretsmanager:GetSecretValue",
             "ec2:StartInstances",
+            "secretsmanager:GetSecretValue"
+          ],
+          "Effect" : "Allow",
+          "Resource" : [
+            "arn:aws:secretsmanager:*:523761210076:secret:*",
+            "arn:aws:ec2:*:523761210076:instance/*",
+            "arn:aws:s3:::*/*"
+          ],
+          "Sid" : "VisualEditor0"
+        },
+        {
+          "Action" : [
             "ec2:DescribeInstances"
           ],
+          "Effect" : "Allow",
           "Resource" : [
-            "arn:aws:secretsmanager:*:${local.account_id}:secret:*",
-            "arn:aws:ec2:*:${local.account_id}:instance/*",
-            "arn:aws:s3:::*/*"
-          ]
+            "*"
+          ],
+          "Sid" : "Ec2Actions"
         }
-      ]
+      ],
+      "Version" : "2012-10-17"
       }
     )
 
