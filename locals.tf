@@ -255,7 +255,8 @@ locals {
           "Action" : [
             "s3:GetObject",
             "secretsmanager:GetSecretValue",
-            "ec2:StartInstances"
+            "ec2:StartInstances",
+            "ec2:DescribeInstances"
           ],
           "Resource" : [
             "arn:aws:secretsmanager:*:${local.account_id}:secret:*",
