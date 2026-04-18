@@ -244,7 +244,39 @@ locals {
         }
       ]
       }
+    ),
+
+    lambda_ec2startinstance_disc_policy = jsonencode({
+      "Statement" : [
+        {
+          "Action" : [
+            "s3:GetObject",
+            "ec2:StartInstances",
+            "secretsmanager:GetSecretValue"
+          ],
+          "Effect" : "Allow",
+          "Resource" : [
+            "arn:aws:secretsmanager:*:523761210076:secret:*",
+            "arn:aws:ec2:*:523761210076:instance/*",
+            "arn:aws:s3:::*/*"
+          ],
+          "Sid" : "VisualEditor0"
+        },
+        {
+          "Action" : [
+            "ec2:DescribeInstances"
+          ],
+          "Effect" : "Allow",
+          "Resource" : [
+            "*"
+          ],
+          "Sid" : "Ec2Actions"
+        }
+      ],
+      "Version" : "2012-10-17"
+      }
     )
+
     ###########################################################
     # End of IAM policies in JSON format for MC Server
     ###########################################################

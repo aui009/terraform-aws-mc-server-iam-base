@@ -63,3 +63,8 @@ output "ssm_get_parameter_only_policy_arn" {
   description = "ARN of the SSM policy that allows getting parameters from SSM Parameter Store only"
   value       = aws_iam_policy.ssm_get_parameter_only_policy.arn
 }
+
+output "lambda_ec2startinstance_disc_policy_arn" {
+  description = "ARN of the Lambda policy that allows starting EC2 instances and describing them"
+  value       = aws_iam_policy.lambda_ec2startinstance_disc_policy.arn
+}
