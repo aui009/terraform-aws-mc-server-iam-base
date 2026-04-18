@@ -116,6 +116,12 @@ resource "aws_iam_policy" "ssm_get_parameter_only_policy" {
   description = "Policy for Lambda function to get parameters from SSM Parameter Store only"
   policy      = local.iam_policies_json["ssm_get_parameter_only_policy"]
 }
+
+resource "aws_iam_policy" "lambda_ec2startinstance_disc_policy" {
+  name        = "lambda-ec2startinstance-disc-policy"
+  description = "Policy for Lambda function to start EC2 instances and describe them"
+  policy      = local.iam_policies_json["lambda_ec2startinstance_disc_policy"]
+}
 ###########################################################################
 #                 IAM Policies Roles Attachement - MC Server Role          
 ###########################################################################
