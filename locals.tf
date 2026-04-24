@@ -256,8 +256,8 @@ locals {
           ],
           "Effect" : "Allow",
           "Resource" : [
-            "arn:aws:secretsmanager:*:523761210076:secret:*",
-            "arn:aws:ec2:*:523761210076:instance/*",
+            "arn:aws:secretsmanager:*:${local.account_id}:secret:*",
+            "arn:aws:ec2:*:${local.account_id}:instance/*",
             "arn:aws:s3:::*/*"
           ],
           "Sid" : "VisualEditor0"
