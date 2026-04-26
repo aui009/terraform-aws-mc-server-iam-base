@@ -275,6 +275,22 @@ locals {
       ],
       "Version" : "2012-10-17"
       }
+    ),
+
+    ssm_eventbridge_policy = jsonencode({
+      "Version" : "2012-10-17",
+      "Statement" : [
+        {
+          "Sid" : "VisualEditor0",
+          "Effect" : "Allow",
+          "Action" : "ssm:SendCommand",
+          "Resource" : [
+            "arn:aws:ec2:*:${local.account_id}:instance/*",
+            "arn:aws:ssm:*:${local.account_id}:document/*"
+          ]
+        }
+      ]
+      }
     )
 
     ###########################################################
