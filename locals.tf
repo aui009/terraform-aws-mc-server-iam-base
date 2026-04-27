@@ -278,18 +278,43 @@ locals {
     ),
 
     ssm_eventbridge_policy = jsonencode({
-      "Version" : "2012-10-17",
       "Statement" : [
         {
-          "Sid" : "VisualEditor0",
+          "Action" : [
+            "ssm:SendCommand",
+            "ssm:StartAutomationExecution",
+            "ec2:CreateSnapshot",
+            "ec2:CreateTags",
+            "ec2:DescribeSnapshots",
+            "ssm:ListDocuments",
+            "ssm:DescribeDocument",
+            "ssm:ListDocumentVersions",
+            "ssm:GetDocument",
+            "ssm:GetAutomationExecution"
+          ],
           "Effect" : "Allow",
-          "Action" : "ssm:SendCommand",
           "Resource" : [
             "arn:aws:ec2:*:${local.account_id}:instance/*",
-            "arn:aws:ssm:*:${local.account_id}:document/*"
-          ]
+            "arn:aws:ssm:*:${local.account_id}:document/*",
+            "arn:aws:ssm:*:${local.account_id}:automation-execution/*",
+            "arn:aws:ec2:ap-southeast-1:${local.account_id}:snapshot/*",
+            "arn:aws:ec2:*:${local.account_id}:volume/*",
+            "arn:aws:ssm:ap-southeast-1:${local.account_id}:*"
+          ],
+          "Sid" : "VisualEditor0"
+        },
+        {
+          "Action" : [
+            "ec2:DescribeSnapshots"
+          ],
+          "Effect" : "Allow",
+          "Resource" : [
+            "*"
+          ],
+          "Sid" : "DescribeEc2Snapshots"
         }
-      ]
+      ],
+      "Version" : "2012-10-17"
       }
     )
 
