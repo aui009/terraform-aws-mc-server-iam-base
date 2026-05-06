@@ -1,4 +1,6 @@
-data "aws_caller_identity" "current" {}
+data "aws_caller_identity" "current" {
+
+}
 
 data "terraform_remote_state" "based_layers" {
   backend = "s3"
@@ -316,7 +318,25 @@ locals {
       ],
       "Version" : "2012-10-17"
       }
-    )
+    ),
+
+    ec2_snapshot_retention_policy = jsonencode({
+      "Version" : "2012-10-17",
+      "Statement" : [
+        {
+          "Sid" : "VisualEditor0",
+          "Effect" : "Allow",
+          "Action" : "ec2:DeleteSnapshot",
+          "Resource" : "arn:aws:ec2:*::snapshot/*"
+        },
+        {
+          "Sid" : "VisualEditor1",
+          "Effect" : "Allow",
+          "Action" : "ec2:DescribeSnapshots",
+          "Resource" : "*"
+        }
+      ]
+    })
 
     ###########################################################
     # End of IAM policies in JSON format for MC Server

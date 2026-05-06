@@ -147,6 +147,11 @@ resource "aws_iam_policy" "ssm_eventbridge_policy" {
   policy      = local.iam_policies_json["ssm_eventbridge_policy"]
 }
 
+resource "aws_iam_policy" "ec2_snapshot_retention_policy" {
+  name        = "ec2-snapshot-retention-policy"
+  description = "Policy for Lambda function to retain EC2 snapshots"
+  policy      = local.iam_policies_json["ec2_snapshot_retention_policy"]
+}
 
 ###########################################################################
 #                 IAM Policies Roles Attachement - MC Server Role          
