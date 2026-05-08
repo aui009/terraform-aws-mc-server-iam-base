@@ -1,4 +1,6 @@
-data "aws_caller_identity" "current" {}
+data "aws_caller_identity" "current" {
+
+}
 
 data "terraform_remote_state" "based_layers" {
   backend = "s3"
@@ -256,8 +258,8 @@ locals {
           ],
           "Effect" : "Allow",
           "Resource" : [
-            "arn:aws:secretsmanager:*:523761210076:secret:*",
-            "arn:aws:ec2:*:523761210076:instance/*",
+            "arn:aws:secretsmanager:*:${local.account_id}:secret:*",
+            "arn:aws:ec2:*:${local.account_id}:instance/*",
             "arn:aws:s3:::*/*"
           ],
           "Sid" : "VisualEditor0"
@@ -275,7 +277,66 @@ locals {
       ],
       "Version" : "2012-10-17"
       }
-    )
+    ),
+
+    ssm_eventbridge_policy = jsonencode({
+      "Statement" : [
+        {
+          "Action" : [
+            "ssm:SendCommand",
+            "ssm:StartAutomationExecution",
+            "ec2:CreateSnapshot",
+            "ec2:CreateTags",
+            "ec2:DescribeSnapshots",
+            "ssm:ListDocuments",
+            "ssm:DescribeDocument",
+            "ssm:ListDocumentVersions",
+            "ssm:GetDocument",
+            "ssm:GetAutomationExecution"
+          ],
+          "Effect" : "Allow",
+          "Resource" : [
+            "arn:aws:ec2:*:${local.account_id}:instance/*",
+            "arn:aws:ssm:*:${local.account_id}:document/*",
+            "arn:aws:ssm:*:${local.account_id}:automation-execution/*",
+            "arn:aws:ec2:ap-southeast-1:${local.account_id}:snapshot/*",
+            "arn:aws:ec2:*:${local.account_id}:volume/*",
+            "arn:aws:ssm:ap-southeast-1:${local.account_id}:*"
+          ],
+          "Sid" : "VisualEditor0"
+        },
+        {
+          "Action" : [
+            "ec2:DescribeSnapshots"
+          ],
+          "Effect" : "Allow",
+          "Resource" : [
+            "*"
+          ],
+          "Sid" : "DescribeEc2Snapshots"
+        }
+      ],
+      "Version" : "2012-10-17"
+      }
+    ),
+
+    ec2_snapshot_retention_policy = jsonencode({
+      "Version" : "2012-10-17",
+      "Statement" : [
+        {
+          "Sid" : "VisualEditor0",
+          "Effect" : "Allow",
+          "Action" : "ec2:DeleteSnapshot",
+          "Resource" : "arn:aws:ec2:*::snapshot/*"
+        },
+        {
+          "Sid" : "VisualEditor1",
+          "Effect" : "Allow",
+          "Action" : "ec2:DescribeSnapshots",
+          "Resource" : "*"
+        }
+      ]
+    })
 
     ###########################################################
     # End of IAM policies in JSON format for MC Server

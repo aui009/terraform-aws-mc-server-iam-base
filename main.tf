@@ -27,6 +27,24 @@ resource "aws_iam_role" "eventbridge_step_fn_role" {
     ]
   })
 }
+
+resource "aws_iam_role" "evenbridge_ssm_role" {
+  name = "eventbridge-ssm-role"
+  assume_role_policy = jsonencode({
+    Version : "2012-10-17",
+    Statement : [
+      {
+        Effect : "Allow",
+        Principal : {
+          Service : "events.amazonaws.com"
+        },
+        Action : "sts:AssumeRole"
+      }
+    ]
+  })
+}
+
+
 ###########################################################
 #                 IAM Policies                            #
 ###########################################################
@@ -122,6 +140,19 @@ resource "aws_iam_policy" "lambda_ec2startinstance_disc_policy" {
   description = "Policy for Lambda function to start EC2 instances and describe them"
   policy      = local.iam_policies_json["lambda_ec2startinstance_disc_policy"]
 }
+
+resource "aws_iam_policy" "ssm_eventbridge_policy" {
+  name        = "ssm-eventbridge-policy"
+  description = "Policy for SSM to put events to EventBridge"
+  policy      = local.iam_policies_json["ssm_eventbridge_policy"]
+}
+
+resource "aws_iam_policy" "ec2_snapshot_retention_policy" {
+  name        = "ec2-snapshot-retention-policy"
+  description = "Policy for Lambda function to retain EC2 snapshots"
+  policy      = local.iam_policies_json["ec2_snapshot_retention_policy"]
+}
+
 ###########################################################################
 #                 IAM Policies Roles Attachement - MC Server Role          
 ###########################################################################
@@ -171,6 +202,14 @@ resource "aws_iam_role_policy_attachment" "ssm_step_fn_policy_attachment" {
 resource "aws_iam_role_policy_attachment" "lambda_invoke_step_fn_policy_attachment" {
   role       = aws_iam_role.step_fn_role_ssm_ec2_role.name
   policy_arn = aws_iam_policy.lambda_invoke_step_fn_policy.arn
+}
+
+###########################################################################
+#                 IAM Policies Roles Attachement - SSM Role for EventBridge         
+###########################################################################
+resource "aws_iam_role_policy_attachment" "ssm_eventbridge_policy_attachment" {
+  role       = aws_iam_role.evenbridge_ssm_role.name
+  policy_arn = aws_iam_policy.ssm_eventbridge_policy.arn
 }
 
 ###########################################################
